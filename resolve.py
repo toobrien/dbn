@@ -1,5 +1,4 @@
-from databento  import Historical, SType
-from datetime   import datetime, timedelta
+from databento  import Historical
 from json       import dumps
 from sys        import argv
 from time       import time
@@ -9,8 +8,9 @@ if __name__ == "__main__":
 
     t0      = time()
     client  = Historical()
-    start   = argv[1] if argv[1] != "-" else "2017-05-21"
-    end     = argv[2] if argv[2] != "-" else (datetime.now() - timedelta(days = 1)).strftime("%Y-%m-%d")
+    rng     = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
+    start   = argv[1] if argv[1] != "-" else rng["start_date"]
+    end     = argv[2] if argv[2] != "-" else rng["end_date"]
     symbols = argv[3:]
 
     res = client.symbology.resolve(
