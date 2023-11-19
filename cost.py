@@ -27,7 +27,6 @@ if __name__ == "__main__":
     }
 
     cost = client.metadata.get_cost(**args)
-
     size = client.metadata.get_billable_size(**args)
 
     print(f"{start} - {end}")
