@@ -23,4 +23,4 @@ if __name__ == "__main__":
         end         = end
     )
 
-    dfn.to_file("./definitions/{symbol}_dfn.dbn.zst")
+    dfn.to_file(f"./definitions/{symbol}_dfn.dbn.zst")
