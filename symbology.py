@@ -24,7 +24,7 @@ if __name__ == "__main__":
         end_date    = end
     )
 
-    count = 0
+    symbols = []
 
     for symbol, dfn in res["result"].items():
 
@@ -32,10 +32,26 @@ if __name__ == "__main__":
 
             continue
 
-        for rec in dfn:
+        two_digit_year = symbol[-2].isdigit()
 
-            print(f"{symbol:30}{rec['s']}\t{rec['d0']}\t{rec['d1']}")
+        year = symbol[-2:] if not two_digit_year else symbol[-3:]
+        month = symbol[-3:-2] if not two_digit_year else symbol[-4:-3]
+        parent = symbol[:-3] if not two_digit_year else symbol[:-4]
 
-        count += 1
+        symbols.append(
+            (
+                parent, 
+                month,
+                year
+            )
+        )
 
-    print(f"\ncount: {count}")
+        #for rec in dfn:
+
+            # print(f"{symbol:30}{rec['s']}\t{rec['d0']}\t{rec['d1']}")
+
+    for symbol in symbols:
+
+        print(f"{symbol[0]}{symbol[1]}{symbol[2]}")
+
+    print(f"\ncount: {len(symbols)}")
