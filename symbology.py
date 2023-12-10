@@ -24,4 +24,10 @@ if __name__ == "__main__":
         end_date    = end
     )
 
-    print(dumps(res, indent = 2))
+    for symbol, dfn in res["result"].items():
+
+        for rec in dfn:
+
+            print(f"{symbol:30}{rec['s']}\t{rec['d0']}\t{rec['d1']}")
+
+    pass
