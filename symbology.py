@@ -24,10 +24,18 @@ if __name__ == "__main__":
         end_date    = end
     )
 
+    count = 0
+
     for symbol, dfn in res["result"].items():
+
+        if ":" in symbol or "-" in symbol or " " in symbol:
+
+            continue
 
         for rec in dfn:
 
             print(f"{symbol:30}{rec['s']}\t{rec['d0']}\t{rec['d1']}")
 
-    pass
+        count += 1
+
+    print(f"\ncount: {count}")
