@@ -11,13 +11,14 @@ if __name__ == "__main__":
     rng     = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
     start   = argv[1] if argv[1] != "-" else rng["start_date"]
     end     = argv[2] if argv[2] != "-" else rng["end_date"]
-    symbols = argv[3:]
+    schema  = argv[3]
+    symbols = argv[4:]
 
 
     data = client.timeseries.get_range(
         dataset = "GLBX.MDP3",
         symbols = symbols,
-        schema  = "ohlcv-1d",
+        schema  = schema,
         start   = start,
         end     = end
     )
