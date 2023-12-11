@@ -1,12 +1,15 @@
-from    sys                     import  argv
-from    time                    import  time
 import  numpy                   as      np
 import  plotly.graph_objects    as      go
 import  polars                  as      pl
-from    ..util                  import  read_batch
+from    sys                     import  argv, path
+from    time                    import  time
+
+path.append(".")
+
+from    util                    import  read_batch
 
 
-# python ts_stat.py GLBX-20231125-WA5564KMNG glbx-mdp3-20231123.mbp-1.dbn.zst RBH4 RBM4 RBU4 RBZ4 RBH4-RBM4
+# python scripts/ts_stat.py GLBX-20231125-WA5564KMNG glbx-mdp3-20231123.mbp-1.dbn.zst RBH4 RBM4 RBU4 RBZ4 RBH4-RBM4
 
 
 if __name__ == "__main__":
