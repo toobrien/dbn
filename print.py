@@ -4,17 +4,24 @@ from    sys         import  argv
 from    time        import  time
 
 
-# python print.py 1d_sample df
+# python print.py storage 1d_sample df
 
 
 if __name__ == "__main__":
 
     t0      = time()
 
-    fn      = f"storage/{argv[1]}.dbn.zst"
-    fmt     = argv[2]
+    folder  = argv[1]
+    fn      = f"{folder}/{argv[2]}.dbn.zst"
+    fmt     = argv[3]
     data    = DBNStore.from_file(fn)
-    df      = pl.DataFrame(data.to_df())
+    df      = data.to_df()
+
+    if not df.index.empty:
+
+        df.reset_index()
+
+    df = pl.DataFrame(df)
 
     if fmt == "df":
 
@@ -32,4 +39,3 @@ if __name__ == "__main__":
             print("\t".join([ str(i) for i in row ]))
 
         print(f"\ncount: {len(rows)}")
-
