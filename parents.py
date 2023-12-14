@@ -1,5 +1,6 @@
 
 FUTS = [
+  "ALI.FUT",
   "ZT.FUT",
   "ZF.FUT",
   "ZN.FUT",

@@ -1,31 +1,31 @@
-from    databento   import  Historical
-from    polars      import  DataFrame
+from    databento   import  DBNStore
+import  polars      as      pl
 from    sys         import  argv
 from    time        import  time
+
+
+# python print.py 1d_sample df
 
 
 if __name__ == "__main__":
 
     t0      = time()
-    client  = Historical()
-    rng     = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
-    start   = argv[1] if argv[1] != "-" else rng["start_date"]
-    end     = argv[2] if argv[2] != "-" else rng["end_date"]
-    schema  = argv[3]
-    symbols = argv[4:]
 
+    fn      = f"storage/{argv[1]}.dbn.zst"
+    fmt     = argv[2]
+    data    = DBNStore.from_file(fn)
+    df      = pl.DataFrame(data.to_df())
 
-    data = client.timeseries.get_range(
-        dataset = "GLBX.MDP3",
-        symbols = symbols,
-        schema  = schema,
-        start   = start,
-        end     = end
-    )
+    if fmt == "df":
 
-    rows = DataFrame(data.to_df()).rows()
+        with pl.Config(tbl_rows = -1, tbl_cols = -1):
+        
+            print(df)
 
-    for row in rows:
+    elif fmt == "rows":
 
-        print("\t".join([ str(i) for i in row ]))
+        rows    = df.rows()
+        for row in rows:
+
+            print("\t".join([ str(i) for i in row ]))
 
