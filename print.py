@@ -22,10 +22,14 @@ if __name__ == "__main__":
         
             print(df)
 
+        print(f"\ncount: {len(df)}")
+
     elif fmt == "rows":
 
         rows    = df.rows()
         for row in rows:
 
             print("\t".join([ str(i) for i in row ]))
+
+        print(f"\ncount: {len(rows)}")
 
