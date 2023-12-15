@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     if not df.index.empty:
 
-        df.reset_index()
+        df = df.reset_index()
 
     df = pl.DataFrame(df)
 
