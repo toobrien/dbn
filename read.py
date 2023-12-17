@@ -38,4 +38,6 @@ if __name__ == "__main__":
 
             print("\t".join([ str(i) for i in row ]))
 
-        print(f"\ncount: {len(rows)}")
+        print(f"\ncount:   {len(rows)}")
+    
+    print(f"elapsed: {time() - t0:0.1f}s")
