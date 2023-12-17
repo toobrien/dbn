@@ -1,5 +1,6 @@
 from    databento   import  DBNStore
 import  polars      as      pl
+from    typing      import  List
 
 
 def read_batch(job_id: str, fn: str) -> pl.DataFrame:

@@ -4,7 +4,7 @@ from    sys         import  argv
 from    time        import  time
 
 
-# python print.py storage 1d_sample df
+# python read.py storage 1d_sample df
 
 
 if __name__ == "__main__":
