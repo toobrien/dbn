@@ -17,9 +17,10 @@ if __name__ == "__main__":
     stype   = argv[4]
     fn      = f"./storage/{argv[5]}.dbn.zst"
     mode    = argv[6]
-    symbols = argv[7:]
 
     if mode == "create":
+
+        symbols = argv[7:]
 
         data = client.timeseries.get_range(
             dataset     = "GLBX.MDP3",
@@ -32,9 +33,15 @@ if __name__ == "__main__":
 
         data.to_file(path = fn)
     
-    elif mode == "append":
+    elif mode == "new":
 
-        data = DBNStore.from_file(path = fn)
+        data        = DBNStore.from_file(path = fn)
+        dataset     = data.dataset
+        schema      = data.schema
+        start       = data.end
+        stype_in    = data.stype_in
+        symbols     = data.symbology["symbols"]
+        end         = rng["end_date"]
 
         pass
     
