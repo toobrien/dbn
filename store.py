@@ -4,7 +4,7 @@ from    time        import  time
 
 
 # python store.py create mbp-1 2023-12-07 2023-12-08 raw_symbol nqh4_sample NQH4
-# python store.py new mbo 2023-12-15 zrh4_mbo
+# python store.py new - zrh4_mbo
 
 
 if __name__ == "__main__":
