@@ -19,12 +19,12 @@ if __name__ == "__main__":
     end     = rng["end_date"]
     syms    = config["daily_db_futs"]
     args    = {
-                "dataset":  "GLBX.MDP3",
-                "symbols":  syms,
-                "schema":   "statistics",
-                "stype_in": "parent",
-                "start":    start,
-                "end":      end
+                "dataset":      "GLBX.MDP3",
+                "symbols":      syms,
+                "schema":       "statistics",
+                "stype_in":     "parent",
+                "start":        start,
+                "end":          end
             }
 
     cost = client.metadata.get_cost(**args)
@@ -33,4 +33,9 @@ if __name__ == "__main__":
     print(f"{start} - {end}")
     print(f"cost:       {cost:0.4f}")
     print(f"size:       {size} ({size / 1073741824:0.2f} GB)")
+
+    
+    # TODO: request definitions for outrights, record expirations (if necessary)
+
+
     print(f"elapsed:    {time() - t0:0.1f}s")
