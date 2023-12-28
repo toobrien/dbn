@@ -16,6 +16,7 @@ if __name__ == "__main__":
     fmt     = argv[3]
     data    = DBNStore.from_file(fn)
     df      = data.to_df()
+    columns = argv[4:] if len(argv) > 4 else None
 
     if not df.index.empty:
 
@@ -24,6 +25,10 @@ if __name__ == "__main__":
     df = pl.DataFrame(df)
 
     if fmt == "df":
+
+        if columns:
+
+            df = df[columns]
 
         with pl.Config(tbl_rows = -1, tbl_cols = -1):
         
