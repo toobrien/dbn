@@ -12,20 +12,21 @@ if __name__ == "__main__":
 
     t0      = time()
 
-    client  = Historical()
-    rng     = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
-    config  = loads(open("./config.json", "r+").read())
-    start   = config["daily_db_checkpoint"]
-    end     = rng["end_date"]
-    syms    = config["daily_db_futs"]
-    args    = {
-                "dataset":      "GLBX.MDP3",
-                "symbols":      syms,
-                "schema":       "statistics",
-                "stype_in":     "parent",
-                "start":        start,
-                "end":          end
-            }
+    client      = Historical()
+    rng         = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
+    config      = loads(open("./config.json", "r+").read())
+    expirations = loads(open("./expirations.json", "r+").read())
+    start       = config["daily_db_checkpoint"]
+    end         = rng["end_date"]
+    syms        = config["daily_db_futs"]
+    args        = {
+                    "dataset":      "GLBX.MDP3",
+                    "symbols":      syms,
+                    "schema":       "statistics",
+                    "stype_in":     "parent",
+                    "start":        start,
+                    "end":          end
+                }
 
     cost = client.metadata.get_cost(**args)
     size = client.metadata.get_billable_size(**args)
