@@ -32,7 +32,7 @@ def format_df(recs: Dict[str, List[float]]):
 
 if __name__ == "__main__":
 
-    t0      = time()
+    t0 = time()
 
     client          = Historical()
     rng             = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
