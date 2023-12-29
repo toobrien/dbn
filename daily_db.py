@@ -60,9 +60,6 @@ if __name__ == "__main__":
     print(f"cost:       {cost:0.4f}")
     print(f"size:       {size} ({size / 1073741824:0.2f} GB)")
 
-    
-    # TODO: request definitions for outrights, record expirations (if necessary)
-
     stats = client.timeseries.get_range(**args)
     stats = stats.to_df()
     stats = stats[[ "symbol", "ts_event", "stat_type", "price", "quantity" ]]
