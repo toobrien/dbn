@@ -40,6 +40,8 @@ def to_df(
     recs: Dict[str, List[float]]
 ):
 
+    # TODO: format records to match existing db
+
     recs = [
         [ sym, date, *rec ]
         for sym, rec in recs.items()
@@ -94,6 +96,8 @@ if __name__ == "__main__":
 
         to_write[date] = {}
 
+    # record ohlcv and oi per symbol, date
+        
     for row in stats:
 
         date        = row["date"]
@@ -175,7 +179,7 @@ if __name__ == "__main__":
 
         sym_rec[rec.dte] = dte
 
-    # TODO: process to_write into dfs, format, and write to parquet
+    # batch by date, format records, and write to parquet
         
     for date, recs in to_write.items():
 
