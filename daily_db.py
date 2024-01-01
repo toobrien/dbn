@@ -35,17 +35,24 @@ class rec(IntEnum):
     dte             = 6
 
 
+def format_recs(recs: List[List]):
+
+    # TODO: format records to match existing db
+
+    return recs
+
+
 def to_df(
     date: str,
     recs: Dict[str, List[float]]
 ):
 
-    # TODO: format records to match existing db
-
     recs = [
         [ sym, date, *rec ]
         for sym, rec in recs.items()
     ]
+
+    recs = format_recs(recs)
 
     df = DataFrame(recs, columns = DF_COLS)
 
