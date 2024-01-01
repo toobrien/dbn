@@ -1,9 +1,8 @@
 from    datetime    import  datetime
 from    enum        import  IntEnum
 from    json        import  dump, loads
-from    databento   import  DBNStore, Historical
-import  polars      as      pl
-from    sys         import  argv
+from    databento   import  Historical
+from    pandas      import  DataFrame
 from    typing      import  Dict, List
 from    time        import  time
 
@@ -11,7 +10,18 @@ from    time        import  time
 # python daily_db.py 
 
 
-DATE_FMT = "%Y-%m-%d"
+DATE_FMT    = "%Y-%m-%d"
+DB_PATH     = "./futs"
+DF_COLS     = [ 
+                "symbol",
+                "date",
+                "open",
+                "high",
+                "low",
+                "settle",
+                "open_interest",
+                "dte"
+            ]
 
 
 class rec(IntEnum):
@@ -25,9 +35,21 @@ class rec(IntEnum):
     dte             = 6
 
 
-def format_df(recs: Dict[str, List[float]]):
+def to_df(
+    date: str,
+    recs: Dict[str, List[float]]
+):
 
-    pass
+    recs = [
+        [ sym, date, *rec ]
+        for sym, rec in recs.items()
+    ]
+
+    df = DataFrame(recs, columns = DF_COLS)
+
+    df.sort_values(by = [ "symbol", "dte" ])
+
+    return df
 
 
 if __name__ == "__main__":
@@ -155,7 +177,11 @@ if __name__ == "__main__":
 
     # TODO: process to_write into dfs, format, and write to parquet
         
-    # ...
+    for date, recs in to_write.items():
+
+        df = to_df(date, recs)
+
+        df.to_parquet(path = f"{DB_PATH}/{date}.parquet")
     
     # write config, expirations
 
