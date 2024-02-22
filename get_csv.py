@@ -5,7 +5,7 @@ from    sys         import  argv
 from    time        import  time
 
 
-# python store_csv.py mbp-1 2023-12-07 2023-12-08 raw_symbol 'HO:BF M4-U4-Z4'
+# python get_csv.py mbp-1 - - raw_symbol 'HO:BF M4-U4-Z4'
 
 
 if __name__ == "__main__":
