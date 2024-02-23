@@ -28,14 +28,18 @@ if __name__ == "__main__":
         old_df  = pl.read_csv(fn)
         start   = old_df["ts_event"][-1]
 
-    data = client.timeseries.get_range(
-        dataset     = "GLBX.MDP3",
-        schema      = schema,
-        stype_in    = stype,
-        symbols     = [ instrument ],
-        start       = start,
-        end         = end 
-    )
+    args = {
+            "dataset": "GLBX.MDP3",
+            "schema":   schema,
+            "stype_in": stype,
+            "symbols":  [ instrument ],
+            "start":    start,
+            "end":      end 
+    }
+
+    cost = client.metadata.get_cost(**args)
+    size = client.metadata.get_billable_size(**args)
+    data = client.timeseries.get_range(**args)
 
     if old_df.is_empty():
 
@@ -54,4 +58,6 @@ if __name__ == "__main__":
     print(f"{'mode:':<15}{mode}")
     print(f"{'start:':<15}{start}")
     print(f"{'end:':<15}{end}")
+    print(f"{'cost':<15}{cost:0.4f}")
+    print(f"{'size':<15}{size} ({size / 1073741824:0.2f} GB)")
     print(f"{'elapsed:':<15}{time() - t0:<0.1f}s")
