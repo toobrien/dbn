@@ -28,6 +28,13 @@ if __name__ == "__main__":
         old_df  = pl.read_csv(fn)
         start   = old_df["ts_event"][-1]
 
+        if " " in start:
+
+            # hack, need to fix ts consistency
+
+            parts = start.split()
+            start = f"{parts[0]}T{parts[1]}"
+
     args = {
             "dataset": "GLBX.MDP3",
             "schema":   schema,
