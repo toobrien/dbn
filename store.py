@@ -15,8 +15,8 @@ if __name__ == "__main__":
     start   = argv[2] if argv[2] != "-" else rng["start_date"]
     end     = argv[3] if argv[3] != "-" else rng["end_date"]
     stype   = argv[4]
-    fn      = f"./storage/{argv[6]}.dbn.zst"
-    symbols = argv[5:]
+    fn      = f"./storage/{argv[5]}.dbn.zst"
+    symbols = argv[6:]
 
     data = client.timeseries.get_range(
         dataset     = "GLBX.MDP3",
