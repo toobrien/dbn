@@ -37,12 +37,12 @@ if __name__ == "__main__":
     min_qty = int(argv[2])
 
     df  = read_storage(fn)
-    ids = list(df.filter((pl.col("size") >= min_qty) & (pl.col("action") == "A")).select("order_id").unique())
+    ids = df.filter((pl.col("size") >= min_qty)).select("order_id").unique()
     
-    for id in ids:
+    for id in ids.iter_rows():
 
-        print(id)
+        df_ = df.filter(pl.col("order_id") == id).select([ "order_id", "ts_event", "price", "size", "action", "side" ])
 
-        df_ = df.filter(pl.col(""))
+        print(df_)
 
     pass
