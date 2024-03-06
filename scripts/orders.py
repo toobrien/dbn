@@ -8,6 +8,7 @@ from    util                    import  read_storage
 
 
 # python scripts/orders.py 20240301_esh4_mbo 500
+# python scripts/orders.py 20240301_esh4_mbo 500 6412974235356 6412973644353
 
 
 '''
@@ -59,7 +60,7 @@ def combine_trades(df: pl.DataFrame):
     y.append(cur_price)
     z.append(prev_size)
 
-    #print(f"length trades: {len(x)}")
+    print(f"length trades: {len(x)}")
 
     return x, y, z
                         
@@ -69,26 +70,33 @@ if __name__ == "__main__":
     pl.Config.set_tbl_cols(-1)
     pl.Config.set_tbl_rows(-1)
 
-    fn      = argv[1]
-    min_qty = int(argv[2])
-    df      = read_storage(fn).with_row_index()
-    ids     = df.filter((pl.col("size") >= min_qty)).select("order_id").unique()
-    trades  = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "price", "size" ]))
-    traces  = [ ( trades[0], trades[1], "trades", "#0000FF", "lines" ) ]
-    fig     = go.Figure()
+    fn          = argv[1]
+    min_qty     = int(argv[2])
+    df          = read_storage(fn).with_row_index()
+    ids         = df.filter((pl.col("size") >= min_qty)).select("order_id").unique()
+    to_print    = [ int(id_) for id_ in argv[3:] ]
+    to_print    = [ id_[0] for id_ in ids ] if -1 in to_print else to_print
+    dfs         = []
+    trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "price", "size" ]))
+    traces      = [ ( trades[0], trades[1], "trades", "#0000FF", "lines" ) ]
+    fig         = go.Figure()
 
-    for id in ids.iter_rows():
+    for id_ in ids.iter_rows():
 
-        df_ = df.filter(pl.col("order_id") == id).select([ "index", "order_id", "ts_event", "price", "size", "action", "side" ])
+        id_ = id_[0]
 
-        #print(df_)
+        df_ = df.filter(pl.col("order_id") == id_).select([ "index", "order_id", "ts_event", "price", "size", "action", "side" ])
+
+        if id_ in to_print:
+
+            dfs.append(df_)
 
         x = df_["index"]
         y = df_["price"]
 
-        #print(f"length {id[0]}: {len(x)}" )
+        print(f"length {id_}: {len(x)}" )
 
-        traces.append(( x, y, id[0], "#FF00FF", "markers+lines" ))
+        traces.append(( x, y, id_, "#FF00FF", "markers+lines" ))
     
 
     for trace in traces:
@@ -104,5 +112,9 @@ if __name__ == "__main__":
                 }
             )
         )
+
+    for df_ in dfs:
+
+        print(df_)
 
     fig.show()
