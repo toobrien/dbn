@@ -75,7 +75,7 @@ if __name__ == "__main__":
     df          = read_storage(fn).with_row_index()
     ids         = df.filter((pl.col("size") >= min_qty)).select("order_id").unique()
     to_print    = [ int(id_) for id_ in argv[3:] ]
-    to_print    = [ id_[0] for id_ in ids ] if -1 in to_print else to_print
+    to_print    = [ id_[0] for id_ in ids.iter_rows() ] if -1 in to_print else to_print
     dfs         = []
     trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "price", "size" ]))
     traces      = [ ( trades[0], trades[1], "trades", "#0000FF", "lines" ) ]
