@@ -60,7 +60,7 @@ def combine_trades(df: pl.DataFrame):
     y.append(cur_price)
     z.append(prev_size)
 
-    print(f"length trades: {len(x)}")
+    print(f"trades: {len(x)}")
 
     return x, y, z
                         
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         x = df_["index"]
         y = df_["price"]
 
-        print(f"length {id_}: {len(x)}" )
+        print(f"{id_}: {len(x)}" )
 
         traces.append(( x, y, id_, "#FF00FF", "markers+lines" ))
     
