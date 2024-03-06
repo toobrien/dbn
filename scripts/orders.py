@@ -7,7 +7,7 @@ path.append(".")
 from    util                    import  read_storage
 
 
-# python scripts/order_life.py 20240301_esh4_mbo
+# python scripts/orders.py 20240301_esh4_mbo 500
 
 
 '''
@@ -106,5 +106,3 @@ if __name__ == "__main__":
         )
 
     fig.show()
-
-    pass
