@@ -4,7 +4,7 @@ from    sys                     import  argv, path
 
 path.append(".")
 
-from    util                    import  read_storage
+from    util                    import  read_storage, strptime
 
 
 # python scripts/orders.py 20240301_esh4_mbo 500
@@ -33,6 +33,7 @@ def combine_trades(df: pl.DataFrame):
     x           = []
     y           = []
     z           = []
+    t           = []
     cur_i       = 0
     prev_price  = df["price"][0]
     prev_size   = 0
@@ -40,8 +41,9 @@ def combine_trades(df: pl.DataFrame):
     for row in df.iter_rows():
 
         cur_i       = row[0]
-        cur_price   = row[1]
-        cur_size    = row[2] 
+        cur_ts      = row[1]
+        cur_price   = row[2]
+        cur_size    = row[3]
 
         if cur_price == prev_price:
 
@@ -52,6 +54,7 @@ def combine_trades(df: pl.DataFrame):
             x.append(cur_i)
             y.append(prev_price)
             z.append(prev_size)
+            t.append(cur_ts)
 
             prev_price  = cur_price
             prev_size   = cur_size
@@ -59,10 +62,11 @@ def combine_trades(df: pl.DataFrame):
     x.append(cur_i)
     y.append(cur_price)
     z.append(prev_size)
+    t.append(cur_ts)
 
     print(f"trades: {len(x)}")
 
-    return x, y, z
+    return x, y, z, t
                         
 
 if __name__ == "__main__":
@@ -73,12 +77,13 @@ if __name__ == "__main__":
     fn          = argv[1]
     min_qty     = int(argv[2])
     df          = read_storage(fn).with_row_index()
+    df          = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", -8)
     ids         = df.filter((pl.col("size") >= min_qty)).select("order_id").unique()
     to_print    = [ int(id_) for id_ in argv[3:] ]
     to_print    = [ id_[0] for id_ in ids.iter_rows() ] if -1 in to_print else to_print
     dfs         = []
-    trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "price", "size" ]))
-    traces      = [ ( trades[0], trades[1], "trades", "#0000FF", "lines" ) ]
+    trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "ts", "price", "size" ]))
+    traces      = [ ( trades[0], trades[1], trades[3], "trades", "#0000FF", "lines" ) ]
     fig         = go.Figure()
 
     fig.update_layout(title_text = fn)
@@ -87,7 +92,7 @@ if __name__ == "__main__":
 
         id_ = id_[0]
 
-        df_ = df.filter(pl.col("order_id") == id_).select([ "index", "order_id", "ts_event", "price", "size", "action", "side" ])
+        df_ = df.filter(pl.col("order_id") == id_).select([ "index", "order_id", "ts", "price", "size", "action", "side" ])
 
         if id_ in to_print:
 
@@ -95,10 +100,11 @@ if __name__ == "__main__":
 
         x = df_["index"]
         y = df_["price"]
+        t = df_["ts"]
 
         print(f"{id_}: {len(x)}" )
 
-        traces.append(( x, y, id_, "#FF00FF", "markers+lines" ))
+        traces.append(( x, y, t, id_, "#FF00FF", "markers+lines" ))
     
 
     for trace in traces:
@@ -108,9 +114,10 @@ if __name__ == "__main__":
                 {
                     "x":        trace[0],
                     "y":        trace[1],
-                    "name":     trace[2],
-                    "marker":   { "color": trace[3]},
-                    "mode":     trace[4]
+                    "text":     trace[2],
+                    "name":     trace[3],
+                    "marker":   { "color": trace[4]},
+                    "mode":     trace[5]
                 }
             )
         )
