@@ -81,6 +81,8 @@ if __name__ == "__main__":
     traces      = [ ( trades[0], trades[1], "trades", "#0000FF", "lines" ) ]
     fig         = go.Figure()
 
+    fig.update_layout(title_text = fn)
+
     for id_ in ids.iter_rows():
 
         id_ = id_[0]
