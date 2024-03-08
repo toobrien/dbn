@@ -1,6 +1,8 @@
+from    datetime    import  datetime, timedelta
 import  databento   as      db
 from    sys         import  argv
 from    time        import  time
+from    util        import  get_dt_rng
 
 
 # python cost.py mbp-1 - - raw_symbol HOZ3 RBZ3 CLZ3 NGZ3
@@ -9,14 +11,13 @@ from    time        import  time
 
 if __name__ == "__main__":
 
-    t0      = time()
-    client  = db.Historical()
-    schema  = argv[1]
-    rng     = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
-    start   = argv[2] if argv[2] != "-" else rng["start_date"]
-    end     = argv[3] if argv[3] != "-" else rng["end_date"]
-    stype   = argv[4]
-    symbols = argv[5:]
+    t0          = time()
+    client      = db.Historical()
+    schema      = argv[1]
+    rng         = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
+    start, end  = get_dt_rng(rng, argv[2], argv[3]) 
+    stype       = argv[4]
+    symbols     = argv[5:]
 
     args = {
         "dataset":  "GLBX.MDP3",

@@ -65,6 +65,8 @@ def combine_trades(df: pl.DataFrame):
     t.append(cur_ts)
 
     print(f"trades: {len(x)}")
+    print(f"min_price: {min(y)}")
+    print(f"max_price: {max(y)}")
 
     return x, y, z, t
                         

@@ -3,6 +3,7 @@ from    os          import  path
 import  polars      as      pl
 from    sys         import  argv
 from    time        import  time
+from    util        import  get_dt_rng
 
 
 # python get_csv.py mbp-1 - - raw_symbol 'HO:BF M4-U4-Z4'
@@ -14,8 +15,7 @@ if __name__ == "__main__":
     client      = Historical()
     rng         = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
     schema      = argv[1]
-    start       = argv[2] if argv[2] != "-" else rng["start_date"]
-    end         = argv[3] if argv[3] != "-" else rng["end_date"]
+    start, end  = get_dt_rng(rng, argv[2], argv[3])
     stype       = argv[4]
     instrument  = argv[5]
     fn          = f"./csvs/{instrument}.csv"

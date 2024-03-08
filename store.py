@@ -1,3 +1,4 @@
+from    datetime    import  datetime, timedelta
 from    databento   import  Historical
 from    sys         import  argv
 from    time        import  time
@@ -13,7 +14,7 @@ if __name__ == "__main__":
     rng     = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
     schema  = argv[1]
     start   = argv[2] if argv[2] != "-" else rng["start_date"]
-    end     = argv[3] if argv[3] != "-" else rng["end_date"]
+    end     = argv[3] if argv[3] != "-" else (datetime.strptime(rng["end_date"], "%Y-%m-%d") + timedelta(days = 1)).strftime("%Y-%m-%dT00:00:00")
     stype   = argv[4]
     fn      = f"./storage/{argv[5]}.dbn.zst"
     symbols = argv[6:]

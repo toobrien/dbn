@@ -1,19 +1,19 @@
 from databento  import Historical
-from json       import dumps
 from sys        import argv
 from time       import time
+from util       import get_dt_rng
+
 
 # python symbology.py - - ES.FUT
 
 
 if __name__ == "__main__":
 
-    t0      = time()
-    client  = Historical()
-    rng     = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
-    start   = argv[1] if argv[1] != "-" else rng["start_date"]
-    end     = argv[2] if argv[2] != "-" else rng["end_date"]
-    symbols = argv[3:]
+    t0          = time()
+    client      = Historical()
+    rng         = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
+    start, end  = get_dt_rng(rng, argv[1], argv[2])
+    symbols     = argv[3:]
 
     res = client.symbology.resolve(
         dataset     = "GLBX.MDP3", 
