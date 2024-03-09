@@ -1,14 +1,15 @@
 import  plotly.graph_objects    as      go
 import  polars                  as      pl
 from    sys                     import  argv, path
+from    time                    import  time
 
 path.append(".")
 
 from    util                    import  read_storage, strptime
 
 
-# python scripts/orders.py 20240301_esh4_mbo 500
-# python scripts/orders.py 20240301_esh4_mbo 500 6412974235356 6412973644353
+# python scripts/orders.py 20240301_esh4_mbo size 500
+# python scripts/oders.py  20240307_rbj4_mbo trades 5
 
 
 '''
@@ -69,40 +70,81 @@ def combine_trades(df: pl.DataFrame):
     print(f"max_price: {max(y)}")
 
     return x, y, z, t
+
+
+def get_ids(
+    df:         pl.DataFrame,
+    mode:       str, 
+    min_qty:    int
+):
+    
+    ids = []
+
+    if mode == "size":
+
+        ids = df.filter(
+                (pl.col("size") >= min_qty)
+            ).select(
+                "order_id"
+            ).unique()
+
+    else:
+
+        ids = df.filter(
+                pl.col("action") == "T"
+            ).group_by(
+                [ "order_id", "ts_event" ]
+            ).len().filter(
+                pl.col("len") >= min_qty
+            ).select(
+                "order_id"
+            ).unique()
+
+        '''
+            for _, group in groups:
+
+                if len(group) >= min_qty:
+
+                    max_trades = group.filter(pl.col("action") == "T")["ts_event"].value_counts()["count"].max()
+
+                    if max_trades and max_trades >= min_qty:
+
+                        keep.append(group)
+        '''
+
+    dfs = [
+            df.filter(pl.col("order_id") == order_id)
+            for order_id in ids.iter_rows()
+        ]
+    
+    return dfs
                         
 
 if __name__ == "__main__":
+
+    t0 = time()
 
     pl.Config.set_tbl_cols(-1)
     pl.Config.set_tbl_rows(-1)
 
     fn          = argv[1]
-    min_qty     = int(argv[2])
-    df          = read_storage(fn).with_row_index()
+    mode        = argv[2]
+    min_qty     = int(argv[3])
+    df          = read_storage(fn).with_row_index().select([ "index", "order_id", "ts_event", "action", "side", "price", "size" ])
     df          = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", -8)
-    ids         = df.filter((pl.col("size") >= min_qty)).select("order_id").unique()
-    to_print    = [ int(id_) for id_ in argv[3:] ]
-    to_print    = [ id_[0] for id_ in ids.iter_rows() ] if -1 in to_print else to_print
-    dfs         = []
+    dfs         = get_ids(df, mode, min_qty)
     trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "ts", "price", "size" ]))
     traces      = [ ( trades[0], trades[1], trades[3], "trades", "#0000FF", "lines" ) ]
     fig         = go.Figure()
 
     fig.update_layout(title_text = fn)
 
-    for id_ in ids.iter_rows():
+    for df_ in dfs:
 
-        id_ = id_[0]
-
-        df_ = df.filter(pl.col("order_id") == id_).select([ "index", "order_id", "ts", "price", "size", "action", "side" ])
-
-        if id_ in to_print:
-
-            dfs.append(df_)
-
-        x = df_["index"]
-        y = df_["price"]
-        t = df_["ts"]
+        id_ = df_["order_id"][0]
+        x   = df_["index"]
+        y   = df_["price"]
+        t   = df_["ts"]
 
         print(f"{id_}: {len(x)}" )
 
@@ -129,3 +171,5 @@ if __name__ == "__main__":
         print(df_)
 
     fig.show()
+
+    print(f"elapsed: {time() - t0:0.2f}s")
