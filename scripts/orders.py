@@ -100,18 +100,6 @@ def get_ids(
                 "order_id"
             ).unique()
 
-        '''
-            for _, group in groups:
-
-                if len(group) >= min_qty:
-
-                    max_trades = group.filter(pl.col("action") == "T")["ts_event"].value_counts()["count"].max()
-
-                    if max_trades and max_trades >= min_qty:
-
-                        keep.append(group)
-        '''
-
     dfs = [
             df.filter(pl.col("order_id") == order_id)
             for order_id in ids.iter_rows()
