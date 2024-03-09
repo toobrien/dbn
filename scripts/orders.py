@@ -93,7 +93,7 @@ def get_ids(
         ids = df.filter(
                 pl.col("action") == "T"
             ).group_by(
-                [ "order_id", "ts_event" ]
+                [ "order_id", "ts" ]
             ).len().filter(
                 pl.col("len") >= min_qty
             ).select(
@@ -118,8 +118,9 @@ if __name__ == "__main__":
     fn          = argv[1]
     mode        = argv[2]
     min_qty     = int(argv[3])
-    df          = read_storage(fn).with_row_index().select([ "index", "order_id", "ts_event", "action", "side", "price", "size" ])
+    df          = read_storage(fn).with_row_index()
     df          = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", -8)
+    df          = df.select([ "index", "order_id", "ts", "action", "side", "price", "size" ])
     dfs         = get_ids(df, mode, min_qty)
     trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "ts", "price", "size" ]))
     traces      = [ ( trades[0], trades[1], trades[3], "trades", "#0000FF", "lines" ) ]
