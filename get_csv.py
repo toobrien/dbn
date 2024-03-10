@@ -50,13 +50,13 @@ if __name__ == "__main__":
 
     if old_df.is_empty():
 
-        df = pl.from_pandas(data.to_df())
+        df = pl.from_pandas(data.to_df(), include_index = True)
 
     else:
 
         old_df = old_df[:-1]
         df = data.to_df()
-        df = pl.from_pandas(df, schema_overrides = old_df.schema)
+        df = pl.from_pandas(df, include_index = True, schema_overrides = old_df.schema)
         df = old_df.vstack(df)
 
     df.write_csv(fn)
