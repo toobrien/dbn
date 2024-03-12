@@ -6,7 +6,8 @@ from    time        import  time
 from    util        import  get_dt_rng
 
 
-# python get_csv.py mbp-1 - - raw_symbol 'HO:BF M4-U4-Z4'
+# python get_csv.py mbp-1 - - raw_symbol 'HO:BF M4-U4-Z4' 0
+# python get_csv.py ohlcv-1m - - continuous HO.c.0 1
 
 
 if __name__ == "__main__":
@@ -18,6 +19,7 @@ if __name__ == "__main__":
     start, end  = get_dt_rng(rng, argv[2], argv[3])
     stype       = argv[4]
     instrument  = argv[5]
+    keep_index  = bool(int(argv[6]))
     fn          = f"./csvs/{instrument}.csv"
     old_df      = pl.DataFrame()
     mode        = "create"
@@ -50,13 +52,13 @@ if __name__ == "__main__":
 
     if old_df.is_empty():
 
-        df = pl.from_pandas(data.to_df(), include_index = True)
+        df = pl.from_pandas(data.to_df(), include_index = keep_index)
 
     else:
 
         old_df = old_df[:-1]
         df = data.to_df()
-        df = pl.from_pandas(df, include_index = True, schema_overrides = old_df.schema)
+        df = pl.from_pandas(df, include_index = keep_index, schema_overrides = old_df.schema)
         df = old_df.vstack(df)
 
     df.write_csv(fn)
