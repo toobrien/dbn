@@ -12,23 +12,6 @@ from    util                    import  read_storage, strptime
 # python scripts/oders.py  20240307_rbj4_mbo trades 5
 
 
-'''
-publisher_id 	uint16_t 	The publisher ID assigned by Databento, which denotes the dataset and venue.
-instrument_id 	uint32_t 	The numeric instrument ID.
-ts_event 	    uint64_t 	The matching-engine-received timestamp expressed as the number of nanoseconds since the UNIX epoch.
-order_id 	    uint64_t 	The order ID assigned by the venue.
-price 	        int64_t 	The order price where every 1 unit corresponds to 1e-9, i.e. 1/1,000,000,000 or 0.000000001.
-size 	        uint32_t 	The order quantity.
-flags 	        uint8_t 	A bit field indicating packet end, message characteristics, and data quality.
-channel_id 	    uint8_t 	The channel ID assigned by Databento as an incrementing integer starting at zero.
-action 	        char 	    The event action. Can be Add, Cancel, Modify, cleaR book, Trade, or Fill.
-side 	        char 	    The order side. Can be Ask, Bid, or None.
-ts_recv 	    uint64_t 	The capture-server-received timestamp expressed as the number of nanoseconds since the UNIX epoch.
-ts_in_delta 	int32_t 	The matching-engine-sending timestamp expressed as the number of nanoseconds before ts_recv.
-sequence 	    uint32_t 	The message sequence number assigned at the venue.
-'''
-
-
 def combine_trades(df: pl.DataFrame):
 
     x           = []
