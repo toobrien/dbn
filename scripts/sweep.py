@@ -24,11 +24,7 @@ if __name__ == "__main__":
     df      = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", -8)
     trades  = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "ts", "price", "size" ]))
     traces  = [ ( trades[0], trades[1], trades[3], "trades", "#0000FF", "lines" ) ]
-    groups  = df.filter(
-                    (pl.col("action") == "T") | (pl.col("action") == "F")
-                ).group_by(
-                    [ "ts" ]
-                )
+    groups  = df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).group_by([ "ts" ])
     fig     = go.Figure()
 
     for _, group in groups:
