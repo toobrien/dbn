@@ -70,7 +70,10 @@ if __name__ == "__main__":
             )
         )
 
-        print(trace[3], f"{trace[1][0]:10}", f"{trace[1][1]:10}", f"{trace[-1]:10}")
+    
+    for trace in traces[1:]:
+        
+        print(trace[3], f"{trace[1][0]:10}", f"{trace[1][1]:10}", f"{trace[1][1] - trace[1][0]:10}", f"{trace[-1]:10}")
 
     fig.update_layout(title_text = fn)
 
