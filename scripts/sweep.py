@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
         if group["price"].n_unique() > min_len:
         
-            # print(group.select([ "ts", "price", "size", "side", "order_id", "action" ]))
+            print(group.select([ "ts", "price", "size", "side", "order_id", "action" ]))
 
             idx         = group["index"][0]
             ts          = group["ts"][0]
