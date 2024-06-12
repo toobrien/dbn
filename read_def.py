@@ -1,4 +1,5 @@
 from    databento   import  DBNStore
+from    os          import  path
 from    sys         import  argv
 from    time        import  time
 import  polars      as      pl
@@ -11,7 +12,7 @@ pl.Config.set_tbl_cols(50)
 if __name__ == "__main__":
 
     t0      = time()
-    path    = f"./{argv[1]}"
+    path    = path.join("", argv[1])
 
     df      = pl.DataFrame(DBNStore.from_file(path = path).to_df())
     rows    = df.filter(df["secsubtype"] == "").select([ "raw_symbol", "expiration", "maturity_year" ]).rows()

@@ -1,4 +1,5 @@
 from    databento   import  Historical
+from    os          import  path
 from    sys         import  argv
 from    time        import  time
 from    util        import  get_dt_rng
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     schema      = argv[1]
     start, end  = get_dt_rng(rng, argv[2], argv[3]) 
     stype       = argv[4]
-    fn          = f"./storage/{argv[5]}.dbn.zst"
+    fn          = path.join(".", "storage", f"{argv[5]}.dbn.zst")
     symbols     = argv[6:]
 
     data = client.timeseries.get_range(

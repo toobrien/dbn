@@ -21,8 +21,8 @@ if __name__ == "__main__":
         symbols     = symbols,
         stype_in    = "raw_symbol",
         stype_out   = "instrument_id",
-        start_date  = start,
-        end_date    = end
+        start       = start,
+        end         = end
     )
 
     print(dumps(res, indent = 2))

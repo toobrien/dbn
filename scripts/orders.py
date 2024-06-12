@@ -5,54 +5,11 @@ from    time                    import  time
 
 path.append(".")
 
-from    util                    import  read_storage, strptime
+from    util                    import  read_storage, strptime, combine_trades
 
 
 # python scripts/orders.py 20240301_esh4_mbo size 500
 # python scripts/oders.py  20240307_rbj4_mbo trades 5
-
-
-def combine_trades(df: pl.DataFrame):
-
-    x           = []
-    y           = []
-    z           = []
-    t           = []
-    cur_i       = 0
-    prev_price  = df["price"][0]
-    prev_size   = 0
-
-    for row in df.iter_rows():
-
-        cur_i       = row[0]
-        cur_ts      = row[1]
-        cur_price   = row[2]
-        cur_size    = row[3]
-
-        if cur_price == prev_price:
-
-            prev_size += cur_size
-        
-        else:
-
-            x.append(cur_i)
-            y.append(prev_price)
-            z.append(prev_size)
-            t.append(cur_ts)
-
-            prev_price  = cur_price
-            prev_size   = cur_size
-
-    x.append(cur_i)
-    y.append(cur_price)
-    z.append(prev_size)
-    t.append(cur_ts)
-
-    print(f"trades: {len(x)}")
-    print(f"min_price: {min(y)}")
-    print(f"max_price: {max(y)}")
-
-    return x, y, z, t
 
 
 def get_ids(

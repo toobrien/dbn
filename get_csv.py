@@ -15,12 +15,12 @@ if __name__ == "__main__":
     t0          = time()
     client      = Historical()
     rng         = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
-    schema      = argv[1]
     start, end  = get_dt_rng(rng, argv[2], argv[3])
+    schema      = argv[1]
     stype       = argv[4]
     instrument  = argv[5]
     keep_index  = bool(int(argv[6]))
-    fn          = f"./csvs/{instrument}.csv"
+    fn          = path.join(".", "csvs", f"{instrument}.csv")
     old_df      = pl.DataFrame()
     mode        = "create"
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
             # hack, need to fix ts consistency
 
             parts = start.split()
-            start = f"{parts[0]}T{parts[1]}"
+            start = f"{parts[0]}T{parts[1]}Z"
 
     args = {
             "dataset": "GLBX.MDP3",

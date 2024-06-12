@@ -1,4 +1,5 @@
 import  databento   as      db
+from    os          import  path
 from    sys         import  argv
 from    util        import  get_dt_rng
 
@@ -8,10 +9,11 @@ from    util        import  get_dt_rng
 
 if __name__ == "__main__":
 
-    client  = db.Historical()
-    rng     = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
+    client      = db.Historical()
+    rng         = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
     start, end  = get_dt_rng(rng, argv[1], argv[2]) 
-    symbol  = argv[3]
+    symbol      = argv[3]
+    fn          = path.join(".", "definitions", f"{symbol}_dfn.dbn.zst") 
 
     dfn = client.timeseries.get_range(
         dataset     = "GLBX.MDP3",
@@ -22,4 +24,4 @@ if __name__ == "__main__":
         end         = end
     )
 
-    dfn.to_file(f"./definitions/{symbol}_dfn.dbn.zst")
+    dfn.to_file(fn)
