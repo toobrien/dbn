@@ -9,6 +9,8 @@ from    util        import  get_dt_rng
 # python get_csv.py mbp-1 - - raw_symbol 'HO:BF M4-U4-Z4' 0
 # python get_csv.py ohlcv-1m - - continuous HO.c.0 1
 
+FMT = "%Y-%m-%dT%H:%M:%S%f+0000"
+
 
 if __name__ == "__main__":
 
@@ -27,15 +29,8 @@ if __name__ == "__main__":
     if path.exists(fn):
 
         mode    = "append"
-        old_df  = pl.read_csv(fn)
-        start   = old_df["ts_event"][-1]
-
-        if " " in start:
-
-            # hack, need to fix ts consistency
-
-            parts = start.split()
-            start = f"{parts[0]}T{parts[1]}Z"
+        old_df  = pl.read_csv(fn, schema_overrides = { "ts_event": pl.Datetime("ns") })
+        start   = old_df["ts_event"].dt.strftime(FMT)[-1]
 
     args = {
             "dataset": "GLBX.MDP3",
@@ -61,7 +56,12 @@ if __name__ == "__main__":
         df = pl.from_pandas(df, include_index = keep_index, schema_overrides = old_df.schema)
         df = old_df.vstack(df)
 
-    df.write_csv(fn)
+    df_ = df.with_columns(df["ts_event"].dt.strftime(FMT))
+
+    print(df_.head())
+    print(df_.tail())
+
+    df_.write_csv(fn)
 
     print(f"{'instrument:':<15}{instrument}")
     print(f"{'mode:':<15}{mode}")
