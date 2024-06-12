@@ -9,7 +9,7 @@ from    util        import  get_dt_rng
 # python get_csv.py mbp-1 - - raw_symbol 'HO:BF M4-U4-Z4' 0
 # python get_csv.py ohlcv-1m - - continuous HO.c.0 1
 
-FMT = "%Y-%m-%dT%H:%M:%S%f+0000"
+FMT = "%Y-%m-%dT%H:%M:%S.%f+0000"
 
 
 if __name__ == "__main__":
