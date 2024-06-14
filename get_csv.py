@@ -58,9 +58,6 @@ if __name__ == "__main__":
 
     df_ = df.with_columns(df["ts_event"].dt.strftime(FMT))
 
-    print(df_.head())
-    print(df_.tail())
-
     df_.write_csv(fn)
 
     print(f"{'instrument:':<15}{instrument}")
