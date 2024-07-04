@@ -5,7 +5,7 @@ from    time        import  time
 from    util        import  get_dt_rng
 
 
-# python store.py mbp-1 2023-12-07 2023-12-08 raw_symbol nqh4_sample NQH4
+# python store.py mbp-1 2024-06-24 2024-06-25 raw_symbol 20240624_esu4_mbo ESU4
 
 
 if __name__ == "__main__":
