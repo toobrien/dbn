@@ -50,6 +50,5 @@ if __name__ == "__main__":
     elif fmt == "csv":
 
         data.to_csv(path = f"./csvs/{argv[2]}.csv")
-        data.to_csv(path = path.join(".", "csvs", f"{argv[2]}.csv"))
     
     print(f"elapsed: {time() - t0:0.1f}s")
