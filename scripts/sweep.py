@@ -21,7 +21,7 @@ if __name__ == "__main__":
     fn      = argv[1]
     min_len = int(argv[2])
     df      = read_storage(fn).with_row_index()
-    df      = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", -8)
+    df      = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", "America/Los_Angeles")
     trades  = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "ts", "price", "size" ]))
     traces  = [ ( trades[0], trades[1], trades[3], "trades", "#0000FF", "lines" ) ]
     groups  = df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).group_by([ "ts" ])

@@ -59,7 +59,7 @@ if __name__ == "__main__":
     mode        = argv[2]
     min_qty     = int(argv[3])
     df          = read_storage(fn).with_row_index()
-    df          = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", -8)
+    df          = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", "America/Los_Angeles")
     df          = df.select([ "index", "order_id", "ts", "action", "side", "price", "size" ])
     dfs         = get_ids(df, mode, min_qty)
     trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "ts", "price", "size" ]))
