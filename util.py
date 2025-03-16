@@ -49,7 +49,8 @@ def strptime(
             pl.col(
                 from_col
             ).map_elements(
-                lambda dt: f"{dt[0:10]}T{dt[10:]}+0000" if " " in dt else dt # hack, fix serialization in dbn.get_csv
+                function        = lambda dt: f"{dt[0:10]}T{dt[10:]}+0000" if " " in dt else dt, # hack, fix serialization in dbn.get_csv
+                return_dtype    = pl.String
             ).cast(
                 pl.Datetime
             ).dt.convert_time_zone(
