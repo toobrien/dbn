@@ -14,24 +14,23 @@ from    util                    import  combine_trades, strptime
 
 if __name__ == "__main__":
 
-    t0          = time()
-    sym         = argv[1]
-    fn          = os.path.join(".", "csvs", f"{sym}_trades.csv")
-    df          = pl.read_csv(fn).select(
-                    [
-                        "ts_event", 
-                        "action", 
-                        "side", 
-                        "price", 
-                        "size"
-                    ]
-                )
-    df          = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", "America/Los_Angeles")
-    df          = df.with_row_index(name = "index")
-    c_map       = { "A": "#0000FF", "B": "#FF0000", "N": "#CCCCCC" }
-    x, y, z, t  = combine_trades(df.select([ "index", "ts", "price", "size" ]))
-
-    #c = [ c_map[s] for s in df["side"] ]
+    t0              = time()
+    sym             = argv[1]
+    fn              = os.path.join(".", "csvs", f"{sym}_trades.csv")
+    df              = pl.read_csv(fn).select(
+                        [
+                            "ts_event", 
+                            "action", 
+                            "side", 
+                            "price", 
+                            "size"
+                        ]
+                    )
+    df              = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", "America/Los_Angeles")
+    df              = df.with_row_index(name = "index")
+    x, y, z, t, s   = combine_trades(df.select([ "index", "ts", "price", "size", "side" ]))
+    c_map           = { "A": "#0000FF", "B": "#FF0000", "N": "#CCCCCC" }
+    c               = [ c_map[i] for i in s ]
 
     fig = go.Figure()
     
@@ -45,7 +44,7 @@ if __name__ == "__main__":
                 "marker_size":  z,
                 "text":         [ f"{t[i]}<br>{z[i]}" for i in range(len(t)) ],
                 "marker":       {
-                                    #"color":    c,
+                                    "color":    c,
                                     "sizemode": "area",
                                     "sizeref":  2. * max(z) / (40.**2),
                                     "sizemin":  4

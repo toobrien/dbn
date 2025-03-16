@@ -62,7 +62,7 @@ if __name__ == "__main__":
     df          = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", "America/Los_Angeles")
     df          = df.select([ "index", "order_id", "ts", "action", "side", "price", "size" ])
     dfs         = get_ids(df, mode, min_qty)
-    trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "ts", "price", "size" ]))
+    trades      = combine_trades(df.filter((pl.col("action") == "T") | (pl.col("action") == "F")).select([ "index", "ts", "price", "size", "side" ]))
     traces      = [ ( trades[0], trades[1], trades[3], "trades", "#0000FF", "lines" ) ]
     fig         = go.Figure()
 
