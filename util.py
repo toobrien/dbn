@@ -90,6 +90,8 @@ def combine_trades(df: pl.DataFrame):
     s           = []
     prev_price  = df["price"][0]
     prev_side   = df["side"][0]
+    prev_ts     = df["ts"][0]
+    prev_i      = df["index"][0]
     prev_size   = 0
 
     for row in df.iter_rows():
@@ -106,20 +108,22 @@ def combine_trades(df: pl.DataFrame):
         
         else:
 
-            x.append(cur_i)
+            x.append(prev_i)
             y.append(prev_price)
             z.append(prev_size)
-            t.append(cur_ts)
+            t.append(prev_ts)
             s.append(prev_side)
 
             prev_price  = cur_price
-            prev_size   = cur_size
             prev_side   = cur_side
+            prev_ts     = cur_ts
+            prev_i      = cur_i
+            prev_size   = cur_size
 
     x.append(cur_i)
     y.append(cur_price)
     z.append(prev_size)
-    t.append(cur_ts)
+    t.append(prev_ts)
     s.append(prev_side)
 
     #print(f"trades: {len(x)}")

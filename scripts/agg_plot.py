@@ -10,13 +10,14 @@ path.append(".")
 from    util                    import  combine_trades, strptime
 
 
-# python agg_plot.py 'LE:BF J5-M5-Q5'
+# python agg_plot.py 'LE:BF J5-M5-Q5' 1
 
 
 if __name__ == "__main__":
 
     t0              = time()
     sym             = argv[1]
+    omit_no_side    = bool(int(argv[2]))
     fn              = os.path.join(".", "csvs", f"{sym}_trades.csv")
     df              = pl.read_csv(fn).select(
                         [
@@ -27,7 +28,7 @@ if __name__ == "__main__":
                             "size"
                         ]
                     )
-    df              = df.filter(pl.col("side") != "N")
+    df              = df.filter(pl.col("side") != "N") if omit_no_side else df
     df              = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", "America/Los_Angeles")
     df              = df.with_row_index(name = "index")
     x, y, z, t, s   = combine_trades(df.select([ "index", "ts", "price", "size", "side" ]))
