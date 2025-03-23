@@ -32,7 +32,7 @@ if __name__ == "__main__":
     df              = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", "America/Los_Angeles")
     df              = df.with_row_index(name = "index")
     x, y, z, t, s   = combine_trades(df.select([ "index", "ts", "price", "size", "side" ]))
-    c_map           = { "A": "#0000FF", "B": "#FF0000", "N": "#CCCCCC" }
+    c_map           = { "A": "#FF0000", "B": "#0000FF", "N": "#CCCCCC" }
     c               = [ c_map[i] for i in s ]
 
     fig = make_subplots(
