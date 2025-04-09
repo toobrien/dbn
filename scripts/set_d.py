@@ -11,8 +11,8 @@ from    data.cat_df             import  get_futc
 from    util                    import  strptime
 
 
-# python scripts/set_d.py "NQM5-NQU5" 1 - -
-# python scripts/set_d.py "LE:BF J5-K5-M5" 1 2024-01-01 -
+# python scripts/set_d.py "NQM5-NQU5" CME 1 - -
+# python scripts/set_d.py "LE:BF J5-M5-Q5" CME 1 2024-01-01 -
 
 
 pl.Config.set_tbl_cols(-1)
@@ -60,8 +60,6 @@ def get_spread(
         end     = min(end, con["date"][-1])
 
         dfs.append(con)
-
-        pass
 
     dfs = [ 
             df_.filter((pl.col("date") >= start) & (pl.col("date") <= end))
