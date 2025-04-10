@@ -131,3 +131,20 @@ def combine_trades(df: pl.DataFrame):
     #print(f"max_price: {max(y)}")
 
     return x, y, z, t, s
+
+
+def plt_fmt(
+        df:     pl.DataFrame,
+        start:  str     = "-",
+        end:    str     = "-",
+        omit_n: bool    = True,
+        tz:     str     = "America/Los_Angeles"
+    ):
+
+    df  = df.filter(pl.col("side") != "N") if omit_n else df
+    df  = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", tz)
+    df  = df.filter(pl.col("ts") > start) if start != "-" else df
+    df  = df.filter(pl.col("ts") < end) if end != "-" else df
+    df  = df.with_row_index(name = "index")
+
+    return df

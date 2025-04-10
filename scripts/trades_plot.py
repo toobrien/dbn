@@ -7,10 +7,10 @@ from    time                    import  time
 
 path.append(".")
 
-from    util                    import  combine_trades, strptime
+from    util                    import  combine_trades, plt_fmt
 
 
-# python agg_plot.py 'LE:BF J5-M5-Q5' 1 2024-01-01 -
+# python trades_plot.py 'LE:BF J5-M5-Q5' 1 2024-01-01 -
 
 
 if __name__ == "__main__":
@@ -18,8 +18,8 @@ if __name__ == "__main__":
     t0              = time()
     sym             = argv[1]
     omit_no_side    = bool(int(argv[2]))
-    start           = argv[3] if argv[3] != '-' else None
-    end             = argv[4] if argv[4] != '-' else None
+    start           = argv[3]
+    end             = argv[4]
     fn              = os.path.join(".", "csvs", f"{sym}_trades.csv")
     df              = pl.read_csv(fn).select(
                         [
@@ -30,11 +30,7 @@ if __name__ == "__main__":
                             "size"
                         ]
                     )
-    df              = df.filter(pl.col("side") != "N") if omit_no_side else df
-    df              = strptime(df, "ts_event", "ts", "%Y-%m-%dT%H:%M:%S.%f", "America/Los_Angeles")
-    df              = df.filter(pl.col("ts") > start) if start else df
-    df              = df.filter(pl.col("ts") < end) if end else df
-    df              = df.with_row_index(name = "index")
+    df              = plt_fmt(df, start, end)
     x, y, z, t, s   = combine_trades(df.select([ "index", "ts", "price", "size", "side" ]))
     c_map           = { "A": "#FF0000", "B": "#0000FF", "N": "#CCCCCC" }
     c               = [ c_map[i] for i in s ]
