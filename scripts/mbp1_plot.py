@@ -46,6 +46,8 @@ def plot_mbp_1(
 
         fig.add_trace(go.Scattergl(t))
 
+    fig.update_layout(title = " ".join(argv[1:]))
+    
     fig.show()
 
     pass

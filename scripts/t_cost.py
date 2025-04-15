@@ -66,6 +66,7 @@ if __name__ == "__main__":
 
         fig.add_trace(go.Histogram(x = trace[1], name = trace[0], marker = { "color": trace[2] }))
 
+    fig.update_layout(title = " ".join(argv[1:]))
     fig.show()
 
     print(trades)
