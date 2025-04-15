@@ -19,11 +19,11 @@ def run(
 ):
     
     f_path  = os.path.join(".", "csvs", f"{sym}_mbp-1.csv")
-    cols    = [ "index", "ts", "action", "side", "price", "size",  "bid_ct_00", "bid_px_00", "ask_px_00", "ask_ct_00" ]
+    cols    = [ "index", "ts", "action", "side", "size",  "bid_ct_00", "bid_px_00", "ask_px_00", "ask_ct_00", "price" ]
     df      = std_fmt(pl.read_csv(f_path), start, end, omit_n).select(cols)
     df      = df.with_columns(
-                (pl.col("ask_px_00") - pl.col("bid_px_00")).alias("s_width"),
-                ((pl.col("ask_px_00") + pl.col("bid_px_00")) / 2).alias("mid")
+                ((pl.col("ask_px_00") + pl.col("bid_px_00")) / 2).alias("mid"),
+                (pl.col("ask_px_00") - pl.col("bid_px_00")).alias("s_width")
             )
     trades  = df.filter(pl.col("action") == "T")
     trades  = trades.with_columns(
