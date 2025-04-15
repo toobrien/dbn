@@ -7,10 +7,10 @@ from    time                    import  time
 
 path.append(".")
 
-from    util                    import  combine_trades, plt_fmt
+from    util                    import  combine_trades, std_fmt
 
 
-# python mbp1_plot.py 'MRBK5' 1 - -
+# python scripts/mbp1_plot.py 'MRBK5' 1 - -
 
 
 def plot_mbp_1(
@@ -22,8 +22,7 @@ def plot_mbp_1(
 
     #cols    = [ "index", "ts", "action", "side", "price", "size", "bid_px_00", "ask_px_00" ]
     f_path  = os.path.join(".", "csvs", f"{sym}_mbp-1.csv")
-    df      = pl.read_csv(f_path)
-    df      = plt_fmt(df, start, end, omit_n)
+    df      = std_fmt(pl.read_csv(f_path), start, end, omit_n)
     #df      = df.select(cols)
     trades  = df.filter(pl.col("action") == "T").select([ "index", "ts", "price", "side", "size" ])
     traces  = [

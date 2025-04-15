@@ -7,10 +7,10 @@ from    time                    import  time
 
 path.append(".")
 
-from    util                    import  combine_trades, plt_fmt
+from    util                    import  combine_trades, std_fmt
 
 
-# python trades_plot.py 'LE:BF J5-M5-Q5' 1 2024-01-01 -
+# python scripts/trades_plot.py 'LE:BF J5-M5-Q5' 1 2024-01-01 -
 
 
 if __name__ == "__main__":
@@ -30,7 +30,7 @@ if __name__ == "__main__":
                             "size"
                         ]
                     )
-    df              = plt_fmt(df, start, end)
+    df              = std_fmt(df, start, end)
     x, y, z, t, s   = combine_trades(df.select([ "index", "ts", "price", "size", "side" ]))
     c_map           = { "A": "#FF0000", "B": "#0000FF", "N": "#CCCCCC" }
     c               = [ c_map[i] for i in s ]

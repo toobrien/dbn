@@ -133,7 +133,7 @@ def combine_trades(df: pl.DataFrame):
     return x, y, z, t, s
 
 
-def plt_fmt(
+def std_fmt(
         df:     pl.DataFrame,
         start:  str     = "-",
         end:    str     = "-",
